@@ -6,9 +6,15 @@ class composerman extends oxAdminDetails {
 
     public function render() {
         $sTemplate = parent::render();
-        $packages = json_decode(ComposerUtil::getPackageList());
-        $this->_aViewData['packages'] = $packages;
+        $this->_aViewData['token'] = oxRegistry::getSession()->getSessionChallengeToken();
         return $sTemplate;
+    }
+
+    public function getpackages() {
+        $packages = ComposerUtil::getPackageList();
+        header('Content-Type: application/json');
+        echo $packages;
+        exit();
     }
 
 }

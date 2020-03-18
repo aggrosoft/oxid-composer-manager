@@ -1,17 +1,18 @@
 <?php
 
 use Composer\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
 class ComposerUtil
 {
     public static function getPackageList () {
-        return self::runComposerCommand(['command' => 'show', '--format' => 'json', '--direct' => '']);
+        //return self::runComposerCommand(['command' => 'show', '--direct' => false, '--format' => 'json']);
+        return self::runComposerCommand('show --direct --format=json');
     }
 
     public static function getPackageInfo ($package) {
-        return self::runComposerCommand(['command' => 'show', $package => '', '--format' => 'json']);
+        return self::runComposerCommand('show ' . $package . ' --format=json');
     }
 
     public static function getSourcePath(){
@@ -32,7 +33,8 @@ class ComposerUtil
         // Programmatically run command
         $application = new Application();
         $application->setAutoExit(false);
-        $code = $application->run(new ArrayInput($input), $output);
+        $input = new StringInput($input);
+        $code = $application->run($input, $output);
 
         // restore env
         chdir($cwd);
