@@ -32,14 +32,25 @@ export default new Vuex.Store({
     setToken ({ commit }, token) {
       commit('setToken', token)
     },
-    async initPackages ({commit, state, getters}) {
+    async initPackages ({dispatch, state}) {
       if (!state.packages.length) {
-        return getters.token.then(token => {
-          return api.get('/admin/index.php?cl=composerman&fnc=getpackages&stoken='+token).then(r => {
-            commit('setPackages', r.data)
-          })
-        })
+        return dispatch('loadPackages')
       }
+    },
+    async loadPackages ({commit, getters}) {
+      commit('setPackages', [])
+      return getters.token.then(token => {
+        return api.get('/admin/index.php?cl=composerman&fnc=getpackages&stoken='+token).then(r => {
+          commit('setPackages', r.data)
+        })
+      })
+    },
+    async updatePackage ({dispatch, getters}, pkg) {
+      return getters.token.then(token => {
+        return api.get('/admin/index.php?cl=composerman&fnc=updatepackage&stoken='+token+'&package='+pkg).then(() => {
+          return dispatch('loadPackages')
+        })
+      })
     }
   },
   modules: {

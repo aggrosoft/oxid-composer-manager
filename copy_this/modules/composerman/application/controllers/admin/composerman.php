@@ -17,4 +17,10 @@ class composerman extends oxAdminDetails {
         exit();
     }
 
+    public function updatepackage() {
+        $out = ComposerUtil::updatePackage(oxRegistry::getConfig()->getRequestParameter('package'));
+        echo $out;
+        exit();
+    }
+
 }

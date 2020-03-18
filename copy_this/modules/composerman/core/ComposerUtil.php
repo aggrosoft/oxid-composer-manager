@@ -8,11 +8,17 @@ class ComposerUtil
 {
     public static function getPackageList () {
         //return self::runComposerCommand(['command' => 'show', '--direct' => false, '--format' => 'json']);
-        return self::runComposerCommand('show --direct --format=json');
+        @ini_set("memory_limit",-1);
+        return self::runComposerCommand('show --direct -l --format=json');
     }
 
     public static function getPackageInfo ($package) {
         return self::runComposerCommand('show ' . $package . ' --format=json');
+    }
+
+    public static function updatePackage ($package) {
+        @ini_set("memory_limit",-1);
+        return self::runComposerCommand('update ' . $package . ' -n');
     }
 
     public static function getSourcePath(){
