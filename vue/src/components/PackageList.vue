@@ -3,7 +3,7 @@
     <v-data-table
       :items="packages"
       :headers="headers"
-      :loading="!packages || !packages.length"
+      :loading="loading"
       >
       <template v-slot:item.version="{item}">
         <v-chip>
@@ -21,11 +21,10 @@
         <span v-html="statusText(item)" />
       </template>
       <template v-slot:item.action="{item}">
-        <v-btn color="primary" text icon class="mr-lg-2" small @click.stop="clickUpdatePackage(item)" v-on="on" v-if="isUpdatable(item)">
+        <v-btn fab :color="isUpdatable(item) ? 'primary' : ''" text icon class="mr-lg-2" small @click.stop="clickUpdatePackage(item)" v-on="on">
           <v-icon>
             mdi-refresh
           </v-icon>
-          Aktualisieren
         </v-btn>
       </template>
     </v-data-table>
@@ -67,7 +66,7 @@
       ],
     }),
     computed: {
-      ...mapGetters(['packages'])
+      ...mapGetters(['packages', 'loading'])
     },
     methods: {
       versionColor: function(item) {

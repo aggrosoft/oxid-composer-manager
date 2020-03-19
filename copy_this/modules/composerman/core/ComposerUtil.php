@@ -18,7 +18,7 @@ class ComposerUtil
 
     public static function updatePackage ($package) {
         @ini_set("memory_limit",-1);
-        return self::runComposerCommand('update ' . $package . ' -n');
+        return self::runComposerCommand('update ' . $package);
     }
 
     public static function getSourcePath(){
@@ -40,6 +40,7 @@ class ComposerUtil
         $application = new Application();
         $application->setAutoExit(false);
         $input = new StringInput($input);
+        $input->setInteractive(false);
         $code = $application->run($input, $output);
 
         // restore env

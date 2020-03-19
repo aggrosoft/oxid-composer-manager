@@ -12,15 +12,20 @@ const tokenPromise = new Promise((resolve) => { tokenResolve = resolve })
 export default new Vuex.Store({
   getters: {
     token: () => { return tokenPromise },
+    loading: state => state.loading,
     packages: state => state.packages && state.packages.installed ? state.packages.installed : []
   },
   state: {
     packages: {},
-    token: undefined
+    token: undefined,
+    loading: true
   },
   mutations: {
     setPackages (state, packages) {
       state.packages = packages
+    },
+    setLoading (state, loading) {
+      state.loading = loading
     },
     setToken (state, token) {
       const curToken = state.token
@@ -38,14 +43,16 @@ export default new Vuex.Store({
       }
     },
     async loadPackages ({commit, getters}) {
-      commit('setPackages', [])
+      commit('setLoading', true)
       return getters.token.then(token => {
         return api.get('/admin/index.php?cl=composerman&fnc=getpackages&stoken='+token).then(r => {
           commit('setPackages', r.data)
+          commit('setLoading', false)
         })
       })
     },
-    async updatePackage ({dispatch, getters}, pkg) {
+    async updatePackage ({commit, dispatch, getters}, pkg) {
+      commit('setLoading', true)
       return getters.token.then(token => {
         return api.get('/admin/index.php?cl=composerman&fnc=updatepackage&stoken='+token+'&package='+pkg).then(() => {
           return dispatch('loadPackages')
