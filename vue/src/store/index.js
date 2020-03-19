@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-
+import packages from '@/store/mock/packages'
 const api = axios.create()
 
 Vue.use(Vuex)
@@ -13,12 +13,14 @@ export default new Vuex.Store({
   getters: {
     token: () => { return tokenPromise },
     loading: state => state.loading,
-    packages: state => state.packages && state.packages.installed ? state.packages.installed : []
+    packages: state => state.packages && state.packages.installed ? state.packages.installed : [],
+    composerJson: state => state.composerJson
   },
   state: {
-    packages: {},
+    packages: process.env.NODE_ENV === 'production' ? {} : packages,
     token: undefined,
-    loading: true
+    loading: true,
+    composerJson: ''
   },
   mutations: {
     setPackages (state, packages) {
@@ -26,6 +28,9 @@ export default new Vuex.Store({
     },
     setLoading (state, loading) {
       state.loading = loading
+    },
+    setComposerJson (state, composerJson) {
+      state.composerJson = composerJson
     },
     setToken (state, token) {
       const curToken = state.token
@@ -37,9 +42,11 @@ export default new Vuex.Store({
     setToken ({ commit }, token) {
       commit('setToken', token)
     },
-    async initPackages ({dispatch, state}) {
-      if (!state.packages.length) {
+    async initPackages ({dispatch, getters, commit}) {
+      if (!getters.packages.length) {
         return dispatch('loadPackages')
+      } else {
+        commit('setLoading', false)
       }
     },
     async loadPackages ({commit, getters}) {
@@ -58,6 +65,26 @@ export default new Vuex.Store({
           return dispatch('loadPackages')
         })
       })
+    },
+    async removePackage ({commit, dispatch, getters}, pkg) {
+      commit('setLoading', true)
+      return getters.token.then(token => {
+        return api.get('/admin/index.php?cl=composerman&fnc=removepackage&stoken='+token+'&package='+pkg).then(() => {
+          return dispatch('loadPackages')
+        })
+      })
+    },
+    async getComposerJson ({commit, getters}) {
+      commit('setLoading', true)
+      return getters.token.then(token => {
+        return api.get('/admin/index.php?cl=composerman&fnc=getcomposerjson&stoken='+token).then(r => {
+          commit('setComposerJson', r.data)
+          return r.data
+        })
+      })
+    },
+    async saveComposerJson () {
+
     },
     async runCommand ({commit, dispatch, getters}, cmd) {
       commit('setLoading', true)

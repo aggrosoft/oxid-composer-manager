@@ -18,8 +18,26 @@ class composerman extends oxAdminDetails {
     }
 
     public function updatepackage() {
-        $out = ComposerUtil::updatePackage(oxRegistry::getConfig()->getRequestParameter('package'));
+        $package = oxRegistry::getConfig()->getRequestParameter('package');
+        ComposerUtil::purgePackage($package);
+        $out = ComposerUtil::updatePackage($package);
         echo $out;
+        exit();
+    }
+
+    public function removepackage() {
+        $package = oxRegistry::getConfig()->getRequestParameter('package');
+        if (ComposerUtil::getPackageType($package) === 'oxideshop-module') {
+            ComposerUtil::purgePackage($package);
+            $out = ComposerUtil::removePackage($package);
+            echo $out;
+        }
+        exit();
+    }
+
+    public function getcomposerjson() {
+        header('Content-Type: application/json');
+        echo ComposerUtil::getComposerJson();
         exit();
     }
 

@@ -21,23 +21,30 @@
         <span v-html="statusText(item)" />
       </template>
       <template v-slot:item.action="{item}">
-        <v-btn fab :color="isUpdatable(item) ? 'primary' : ''" text icon class="mr-lg-2" small @click.stop="clickUpdatePackage(item)" v-on="on">
+        <v-btn fab :color="isUpdatable(item) ? 'primary' : ''" text icon class="mr-lg-2" small @click.stop="clickUpdatePackage(item)">
           <v-icon>
             mdi-refresh
           </v-icon>
         </v-btn>
+        <v-btn fab color="red darken-1" text icon small @click.stop="clickDeletePackage(item)">
+          <v-icon>
+            mdi-delete
+          </v-icon>
+        </v-btn>
       </template>
     </v-data-table>
+    <ConfirmDialog ref="confirm" />
   </div>
 </template>
 
 <script>
   import {mapActions, mapGetters} from "vuex";
+  import ConfirmDialog from "./ConfirmDialog";
 
   export default {
     name: "PackageList",
+    components: {ConfirmDialog},
     mounted: function() {
-      console.log('init!')
       this.initPackages()
     },
     data: () => ({
@@ -92,10 +99,17 @@
       isUpdatable: function(item) {
         return item['latest-status'] !== 'up-to-date'
       },
-      clickUpdatePackage: function(item) {
-        this.updatePackage(item.name)
+      clickUpdatePackage: async function(item) {
+        if (await this.$refs.confirm.open('Paket aktualisieren?','Wollen Sie das gewählte Paket "'+item.name+'" wirklich aktualisieren?')) {
+          this.updatePackage(item.name)
+        }
       },
-      ...mapActions(['initPackages', 'updatePackage'])
+      clickDeletePackage: async function(item) {
+        if (await this.$refs.confirm.open('Paket entfernen?','Wollen Sie das gewählte Paket "'+item.name+'" wirklich löschen? Dieser Vorgang kann das System unbrauchbar machen, es werden nur Pakete vom Typ "oxideshop-module" gelöscht.')){
+          this.deletePackage(item.name)
+        }
+      },
+      ...mapActions(['initPackages', 'updatePackage', 'deletePackage'])
     }
   }
 </script>
