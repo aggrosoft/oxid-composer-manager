@@ -23,4 +23,12 @@ class composerman extends oxAdminDetails {
         exit();
     }
 
+    public function runcommand() {
+        $cmd = oxRegistry::getConfig()->getRequestParameter('cmd');
+        $cmd = preg_replace('/^composer/', '', $cmd);
+        $out = ComposerUtil::runComposerCommand(trim($cmd));
+        echo $out;
+        exit();
+    }
+
 }

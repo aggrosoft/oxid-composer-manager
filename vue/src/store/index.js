@@ -58,6 +58,20 @@ export default new Vuex.Store({
           return dispatch('loadPackages')
         })
       })
+    },
+    async runCommand ({commit, dispatch, getters}, cmd) {
+      commit('setLoading', true)
+      return getters.token.then(token => {
+        const data = new FormData();
+        data.set('stoken', token)
+        data.set('cl', 'composerman')
+        data.set('fnc', 'runcommand')
+        data.set('cmd', cmd)
+        return api.post('/admin/index.php', data).then(r => {
+          dispatch('loadPackages')
+          return r.data
+        })
+      })
     }
   },
   modules: {

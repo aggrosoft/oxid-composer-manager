@@ -6,19 +6,24 @@
         dark
     >
       <v-toolbar-title>Paketverwaltung</v-toolbar-title>
+      <v-spacer />
+      <CommandDialog />
     </v-app-bar>
 
     <v-content>
       <v-container
           class="fill-height"
-          fluid
       >
         <v-row
-            align="center"
-            justify="center"
         >
-          <v-col class="text-center">
+          <v-col  cols="12" class="text-center">
             <PackageList />
+          </v-col>
+        </v-row>
+        <v-row
+        >
+          <v-col cols="12">
+            <PackageForm />
           </v-col>
         </v-row>
       </v-container>
@@ -34,8 +39,10 @@
 
 <script>
   import PackageList from "./components/PackageList";
+  import PackageForm from "./components/PackageForm";
+  import CommandDialog from "./components/CommandDialog";
 
   export default {
-    components: {PackageList},
+    components: {CommandDialog, PackageForm, PackageList},
   }
 </script>
