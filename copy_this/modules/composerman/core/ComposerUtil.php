@@ -47,6 +47,11 @@ class ComposerUtil
         return self::runComposerCommand('remove ' . $package);
     }
 
+    public static function dumpAutoloader () {
+        @ini_set("memory_limit",-1);
+        return self::runComposerCommand('dumpautoload');
+    }
+
     public static function getSourcePath(){
         return realpath(getShopBasePath().'/../') . '/';
     }

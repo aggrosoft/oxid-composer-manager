@@ -20,6 +20,7 @@ class composerman extends oxAdminDetails {
     public function addpackage() {
         $package = oxRegistry::getConfig()->getRequestParameter('package');
         $out = ComposerUtil::addPackage($package);
+        ComposerUtil::dumpAutoloader();
         echo $out;
         exit();
     }
@@ -28,6 +29,7 @@ class composerman extends oxAdminDetails {
         $package = oxRegistry::getConfig()->getRequestParameter('package');
         ComposerUtil::purgePackage($package);
         $out = ComposerUtil::updatePackage($package);
+        ComposerUtil::dumpAutoloader();
         echo $out;
         exit();
     }
@@ -37,6 +39,7 @@ class composerman extends oxAdminDetails {
         if (ComposerUtil::getPackageType($package) === 'oxideshop-module') {
             ComposerUtil::purgePackage($package);
             $out = ComposerUtil::removePackage($package);
+            ComposerUtil::dumpAutoloader();
             echo $out;
         }
         exit();
