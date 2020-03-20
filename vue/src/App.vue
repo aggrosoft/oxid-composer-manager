@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-app-bar
         app
-        color="indigo"
+        color="secondary"
         dark
     >
       <v-toolbar-title>Paketverwaltung</v-toolbar-title>
@@ -30,10 +30,10 @@
       </v-container>
     </v-content>
     <v-footer
-        color="indigo"
+        color="secondary"
         app
     >
-      <span class="white--text">&copy; 2020 <a href="https://www.aggrosoft.de">Aggrosoft GmbH</a></span>
+      <span class="white--text">&copy; 2020 <a href="https://www.aggrosoft.de" class="white--text">Aggrosoft GmbH</a></span>
     </v-footer>
   </v-app>
 </template>
