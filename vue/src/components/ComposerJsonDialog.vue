@@ -3,10 +3,12 @@
       :value="value"
       @input="onInput"
       width="1000"
+      scrollable
   >
     <template v-slot:activator="{ on }">
       <v-btn
           color="deep-orange"
+          class="mr-2"
           fab
           v-on="on"
       >
@@ -14,7 +16,7 @@
       </v-btn>
     </template>
 
-    <v-card>
+    <v-card :loading="loading">
       <v-card-title
           class="headline"
           primary-title
@@ -23,16 +25,34 @@
       </v-card-title>
 
       <v-card-text>
-        <VuePrismEditor language="json" v-model="contents"/>
+        <VuePrismEditor language="json" v-model="contents" />
       </v-card-text>
 
       <v-divider></v-divider>
 
       <v-card-actions>
+        <v-alert
+            v-if="!valid"
+            border="right"
+            colored-border
+            type="error"
+            elevation="2"
+            dense
+        >
+          Die Datei enthält ungültiges JSON und kann nicht gespeichert werden
+        </v-alert>
         <v-spacer></v-spacer>
+        <v-btn
+            color="warning"
+            text
+            @click="resetComposerJson"
+        >
+          Reset
+        </v-btn>
         <v-btn
             color="primary"
             text
+            :disabled="!valid"
             @click="clickSaveComposerJson"
         >
           Speichern
@@ -55,16 +75,18 @@
     props: ['value'],
     components: {VuePrismEditor},
     data: () => ({
-      cmd: '',
-      output: false
+      contents: '',
+      valid: true,
+      lastValidJson: '',
+      loading: false
     }),
-    mounted: function(){
-      this.getComposerJson()
+    mounted: async function(){
+      this.loading = true
+      this.lastValidJson = await this.getComposerJson()
+      this.resetComposerJson()
+      this.loading = false
     },
     computed: {
-      contents: function () {
-        return JSON.stringify(this.composerJson, null, 2)
-      },
       ...mapGetters(['composerJson'])
     },
     methods: {
@@ -72,10 +94,30 @@
         this.$emit('input', val)
       },
       clickSaveComposerJson: async function() {
+        this.loading = true
+        await this.saveComposerJson(this.contents)
+        this.loading = false
+        this.onInput(false)
         // this.output = false
         // this.output = await this.runCommand(this.cmd)
       },
-      ...mapActions(['getComposerJson', 'saveComposerJson'])
+      resetComposerJson: function () {
+        this.contents = JSON.stringify(this.lastValidJson || this.composerJson, null, 2)
+      },
+      ...mapActions(['getComposerJson','setComposerJson', 'saveComposerJson'])
+    },
+    watch: {
+      composerJson: function (val) {
+        this.contents = JSON.stringify(val, null, 2)
+      },
+      contents: function (val) {
+        try{
+          const json = JSON.parse(val)
+          this.setComposerJson(json)
+          this.valid = true
+          // eslint-disable-next-line no-empty
+        }catch(e){this.valid = false}
+      }
     }
   }
 </script>

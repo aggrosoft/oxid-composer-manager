@@ -3,10 +3,10 @@
     <v-container>
       <v-row>
         <v-col
-            cols="10"
+            cols="6"
         >
           <v-autocomplete
-              v-model="model"
+              v-model="selectedPackage"
               :items="items"
               :loading="isLoading"
               :search-input.sync="search"
@@ -18,11 +18,34 @@
               placeholder="Geben Sie den Paketnamen ein um zu Suchen"
               prepend-icon="mdi-database-search"
               :return-object="false"
-          ></v-autocomplete>
+          >
+            <template v-slot:item="data">
+              <template v-if="typeof data.item !== 'object'">
+                <v-list-item-content v-text="data.item"></v-list-item-content>
+              </template>
+              <template v-else>
+                <v-list-item-content>
+                  <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                  <v-list-item-subtitle v-html="data.item.description"></v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+            </template>
+          </v-autocomplete>
+        </v-col>
+        <v-col
+            cols="4"
+        >
+          <v-select
+            label="Suchen nach"
+            :items="packageTypes"
+            v-model="packageType"
+            return-object
+          />
         </v-col>
         <v-col cols="2">
           <v-btn
             color="primary"
+            @click="clickAddPackage"
             >
             Paket hinzufügen
           </v-btn>
@@ -34,6 +57,7 @@
 
 <script>
   import axios from 'axios'
+  import {mapActions} from "vuex";
 
   const api = axios.create()
 
@@ -42,8 +66,14 @@
     data: () => ({
       entries: [],
       isLoading: false,
-      model: null,
+      selectedPackage: null,
       search: null,
+      packageType: undefined,
+      packageTypes: [
+        {text: 'Module', value: 'oxideshop-module'},
+        {text: 'Themes', value: 'oxideshop-theme'},
+        {text: 'Alles', value: ''},
+      ]
     }),
 
     computed: {
@@ -77,7 +107,8 @@
         // Lazily load input items
         api.get('https://packagist.org/search.json',{
           params: {
-            q: this.search
+            q: this.search,
+            type: this.packageType ? this.packageType.value : ''
           }
         })
           .then(res => {
@@ -90,6 +121,10 @@
           })
           .finally(() => (this.isLoading = false))
       },
+      clickAddPackage () {
+        this.selectedPackage && this.addPackage(this.selectedPackage.name)
+      },
+      ...mapActions(['addPackage'])
     }
 
   }

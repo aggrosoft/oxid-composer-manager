@@ -17,6 +17,13 @@ class composerman extends oxAdminDetails {
         exit();
     }
 
+    public function addpackage() {
+        $package = oxRegistry::getConfig()->getRequestParameter('package');
+        $out = ComposerUtil::addPackage($package);
+        echo $out;
+        exit();
+    }
+
     public function updatepackage() {
         $package = oxRegistry::getConfig()->getRequestParameter('package');
         ComposerUtil::purgePackage($package);
@@ -36,6 +43,13 @@ class composerman extends oxAdminDetails {
     }
 
     public function getcomposerjson() {
+        header('Content-Type: application/json');
+        echo ComposerUtil::getComposerJson();
+        exit();
+    }
+
+    public function savecomposerjson() {
+        ComposerUtil::setComposerJson(oxRegistry::getConfig()->getRequestParameter('contents'));
         header('Content-Type: application/json');
         echo ComposerUtil::getComposerJson();
         exit();

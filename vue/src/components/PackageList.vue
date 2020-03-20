@@ -101,15 +101,17 @@
       },
       clickUpdatePackage: async function(item) {
         if (await this.$refs.confirm.open('Paket aktualisieren?','Wollen Sie das gewählte Paket "'+item.name+'" wirklich aktualisieren?')) {
+          console.log('update')
           this.updatePackage(item.name)
         }
       },
       clickDeletePackage: async function(item) {
         if (await this.$refs.confirm.open('Paket entfernen?','Wollen Sie das gewählte Paket "'+item.name+'" wirklich löschen? Dieser Vorgang kann das System unbrauchbar machen, es werden nur Pakete vom Typ "oxideshop-module" gelöscht.')){
-          this.deletePackage(item.name)
+          console.log('delete')
+          this.removePackage(item.name)
         }
       },
-      ...mapActions(['initPackages', 'updatePackage', 'deletePackage'])
+      ...mapActions(['initPackages', 'updatePackage', 'removePackage'])
     }
   }
 </script>

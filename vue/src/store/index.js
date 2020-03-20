@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import packages from '@/store/mock/packages'
+import composerJson from '@/store/mock/composerJson'
 const api = axios.create()
 
 Vue.use(Vuex)
@@ -20,7 +21,7 @@ export default new Vuex.Store({
     packages: process.env.NODE_ENV === 'production' ? {} : packages,
     token: undefined,
     loading: true,
-    composerJson: ''
+    composerJson: process.env.NODE_ENV === 'production' ? undefined : composerJson,
   },
   mutations: {
     setPackages (state, packages) {
@@ -58,6 +59,14 @@ export default new Vuex.Store({
         })
       })
     },
+    async addPackage ({commit, dispatch, getters}, pkg) {
+      commit('setLoading', true)
+      return getters.token.then(token => {
+        return api.get('/admin/index.php?cl=composerman&fnc=addpackage&stoken='+token+'&package='+pkg).then(() => {
+          return dispatch('loadPackages')
+        })
+      })
+    },
     async updatePackage ({commit, dispatch, getters}, pkg) {
       commit('setLoading', true)
       return getters.token.then(token => {
@@ -75,16 +84,33 @@ export default new Vuex.Store({
       })
     },
     async getComposerJson ({commit, getters}) {
+      if (getters.composerJson) {
+        return getters.composerJson
+      }else{
+        commit('setLoading', true)
+        return getters.token.then(token => {
+          return api.get('/admin/index.php?cl=composerman&fnc=getcomposerjson&stoken='+token).then(r => {
+            commit('setComposerJson', r.data)
+            return r.data
+          })
+        })
+      }
+    },
+    async setComposerJson ({commit}, composerJson) {
+      commit('setComposerJson', composerJson)
+    },
+    async saveComposerJson ({commit, getters}, contents) {
       commit('setLoading', true)
       return getters.token.then(token => {
-        return api.get('/admin/index.php?cl=composerman&fnc=getcomposerjson&stoken='+token).then(r => {
-          commit('setComposerJson', r.data)
+        const data = new FormData();
+        data.set('stoken', token)
+        data.set('cl', 'composerman')
+        data.set('fnc', 'savecomposerjson')
+        data.set('contents', contents)
+        return api.post('/admin/index.php', data).then(r => {
           return r.data
         })
       })
-    },
-    async saveComposerJson () {
-
     },
     async runCommand ({commit, dispatch, getters}, cmd) {
       commit('setLoading', true)

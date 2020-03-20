@@ -10,6 +10,11 @@ class ComposerUtil
         return file_get_contents(self::getSourcePath().'composer.json');
     }
 
+    public static function setComposerJson ($contents) {
+        @copy(self::getSourcePath().'composer.json', self::getSourcePath().'composer.json.backup-composerman');
+        return @file_put_contents(self::getSourcePath().'composer.json', $contents);
+    }
+
     public static function getPackageList () {
         //return self::runComposerCommand(['command' => 'show', '--direct' => false, '--format' => 'json']);
         @ini_set("memory_limit",-1);
@@ -25,6 +30,11 @@ class ComposerUtil
         if (file_exists($packageFile)){
             return json_decode(file_get_contents($packageFile), true);
         }
+    }
+
+    public static function addPackage ($package) {
+        @ini_set("memory_limit",-1);
+        return self::runComposerCommand('require ' . $package);
     }
 
     public static function updatePackage ($package) {
