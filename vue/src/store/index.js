@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
+import api from '@/store/api'
 import packages from '@/store/mock/packages'
 import composerJson from '@/store/mock/composerJson'
-const api = axios.create()
 
 Vue.use(Vuex)
 
@@ -62,24 +61,27 @@ export default new Vuex.Store({
     async addPackage ({commit, dispatch, getters}, pkg) {
       commit('setLoading', true)
       return getters.token.then(token => {
-        return api.get('/admin/index.php?cl=composerman&fnc=addpackage&stoken='+token+'&package='+pkg).then(() => {
-          return dispatch('loadPackages')
+        return api.get('/admin/index.php?cl=composerman&fnc=addpackage&stoken='+token+'&package='+pkg).then(r => {
+          dispatch('loadPackages')
+          return r.data
         })
       })
     },
     async updatePackage ({commit, dispatch, getters}, pkg) {
       commit('setLoading', true)
       return getters.token.then(token => {
-        return api.get('/admin/index.php?cl=composerman&fnc=updatepackage&stoken='+token+'&package='+pkg).then(() => {
-          return dispatch('loadPackages')
+        return api.get('/admin/index.php?cl=composerman&fnc=updatepackage&stoken='+token+'&package='+pkg).then(r => {
+          dispatch('loadPackages')
+          return r.data
         })
       })
     },
     async removePackage ({commit, dispatch, getters}, pkg) {
       commit('setLoading', true)
       return getters.token.then(token => {
-        return api.get('/admin/index.php?cl=composerman&fnc=removepackage&stoken='+token+'&package='+pkg).then(() => {
-          return dispatch('loadPackages')
+        return api.get('/admin/index.php?cl=composerman&fnc=removepackage&stoken='+token+'&package='+pkg).then(r => {
+          dispatch('loadPackages')
+          return r.data
         })
       })
     },

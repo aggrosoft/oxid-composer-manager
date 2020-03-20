@@ -44,16 +44,18 @@
       </template>
     </v-data-table>
     <ConfirmDialog ref="confirm" />
+    <ProgressDialog v-model="progress" :message="progressMessage" />
   </v-card>
 </template>
 
 <script>
   import {mapActions, mapGetters} from "vuex";
   import ConfirmDialog from "./ConfirmDialog";
+  import ProgressDialog from "./ProgressDialog";
 
   export default {
     name: "PackageList",
-    components: {ConfirmDialog},
+    components: {ProgressDialog, ConfirmDialog},
     mounted: function() {
       this.initPackages()
     },
@@ -81,7 +83,9 @@
         },
         { text: 'Aktionen', value: 'action', sortable: false },
       ],
-      search: ''
+      search: '',
+      progress: false,
+      progressMessage: undefined
     }),
     computed: {
       ...mapGetters(['packages', 'loading'])
@@ -112,14 +116,18 @@
       },
       clickUpdatePackage: async function(item) {
         if (await this.$refs.confirm.open('Paket aktualisieren?','Wollen Sie das gewählte Paket "'+item.name+'" wirklich aktualisieren?')) {
-          console.log('update')
-          this.updatePackage(item.name)
+          this.progressMessage = undefined
+          this.progress = true
+          const result = await this.updatePackage(item.name)
+          this.progressMessage = result
         }
       },
       clickDeletePackage: async function(item) {
         if (await this.$refs.confirm.open('Paket entfernen?','Wollen Sie das gewählte Paket "'+item.name+'" wirklich löschen? Dieser Vorgang kann das System unbrauchbar machen, es werden nur Pakete vom Typ "oxideshop-module" gelöscht.')){
-          console.log('delete')
-          this.removePackage(item.name)
+          this.progressMessage = undefined
+          this.progress = true
+          const result =  await this.removePackage(item.name)
+          this.progressMessage = result
         }
       },
       ...mapActions(['initPackages', 'updatePackage', 'removePackage'])
