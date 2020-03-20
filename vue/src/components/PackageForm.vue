@@ -1,9 +1,22 @@
 <template>
+  <v-card>
   <v-form>
-    <v-container>
-      <v-row>
+    <v-container fluid>
+      <v-row align="center">
         <v-col
-            cols="6"
+            cols="4"
+        >
+          <v-select
+              label="Suchen nach Pakettyp"
+              :items="packageTypes"
+              v-model="packageType"
+              prepend-icon="mdi-briefcase-search"
+              return-object
+              hide-details
+          />
+        </v-col>
+        <v-col
+            cols="5"
         >
           <v-autocomplete
               v-model="selectedPackage"
@@ -18,6 +31,8 @@
               placeholder="Geben Sie den Paketnamen ein um zu Suchen"
               prepend-icon="mdi-database-search"
               :return-object="false"
+              clearable
+              hide-details
           >
             <template v-slot:item="data">
               <template v-if="typeof data.item !== 'object'">
@@ -32,27 +47,21 @@
             </template>
           </v-autocomplete>
         </v-col>
-        <v-col
-            cols="4"
-        >
-          <v-select
-            label="Suchen nach"
-            :items="packageTypes"
-            v-model="packageType"
-            return-object
-          />
-        </v-col>
-        <v-col cols="2">
+        <v-col cols="3">
           <v-btn
             color="primary"
             @click="clickAddPackage"
+            :disabled="!selectedPackage"
+            small
             >
-            Paket hinzufügen
+            <v-icon>mdi-plus</v-icon>
+            Hinzufügen
           </v-btn>
         </v-col>
       </v-row>
     </v-container>
   </v-form>
+  </v-card>
 </template>
 
 <script>
@@ -72,7 +81,7 @@
       packageTypes: [
         {text: 'Module', value: 'oxideshop-module'},
         {text: 'Themes', value: 'oxideshop-theme'},
-        {text: 'Alles', value: ''},
+        {text: 'Alle Pakettypen', value: ''},
       ]
     }),
 

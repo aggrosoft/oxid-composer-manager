@@ -1,9 +1,19 @@
 <template>
-  <div>
+  <v-card>
+    <v-card-title>
+      <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Installierte Pakete durchsuchen"
+          single-line
+          hide-details
+      ></v-text-field>
+    </v-card-title>
     <v-data-table
       :items="packages"
       :headers="headers"
       :loading="loading"
+      :search="search"
       >
       <template v-slot:item.version="{item}">
         <v-chip>
@@ -34,7 +44,7 @@
       </template>
     </v-data-table>
     <ConfirmDialog ref="confirm" />
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -71,6 +81,7 @@
         },
         { text: 'Aktionen', value: 'action', sortable: false },
       ],
+      search: ''
     }),
     computed: {
       ...mapGetters(['packages', 'loading'])
