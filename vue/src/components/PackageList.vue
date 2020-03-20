@@ -20,6 +20,11 @@
           {{item.version}}
         </v-chip>
       </template>
+      <template v-slot:item.description="{item}">
+        <span class="ellipsis">
+          {{item.description}}
+        </span>
+      </template>
       <template v-slot:item.latest="{item}">
         <v-chip
           :color="versionColor(item)"
@@ -31,16 +36,18 @@
         <span v-html="statusText(item)" />
       </template>
       <template v-slot:item.action="{item}">
-        <v-btn fab :color="isUpdatable(item) ? 'primary' : ''" text icon class="mr-lg-2" small @click.stop="clickUpdatePackage(item)">
-          <v-icon>
-            mdi-refresh
-          </v-icon>
-        </v-btn>
-        <v-btn fab color="red darken-1" text icon small @click.stop="clickDeletePackage(item)">
-          <v-icon>
-            mdi-delete
-          </v-icon>
-        </v-btn>
+        <v-flex>
+          <v-btn fab :color="isUpdatable(item) ? 'primary' : ''" text icon class="mr-lg-2" small @click.stop="clickUpdatePackage(item)">
+            <v-icon>
+              mdi-refresh
+            </v-icon>
+          </v-btn>
+          <v-btn fab color="red darken-1" text icon small @click.stop="clickDeletePackage(item)">
+            <v-icon>
+              mdi-delete
+            </v-icon>
+          </v-btn>
+        </v-flex>
       </template>
     </v-data-table>
     <ConfirmDialog ref="confirm" />
@@ -136,5 +143,11 @@
 </script>
 
 <style scoped>
-
+  td .ellipsis{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 250px;
+    float: left;
+  }
 </style>

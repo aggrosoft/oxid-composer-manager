@@ -8,6 +8,7 @@
       <v-toolbar-title>Paketverwaltung</v-toolbar-title>
       <v-spacer />
       <ComposerJsonDialog />
+      <ComposerRepositoriesDialog />
       <CommandDialog />
     </v-app-bar>
 
@@ -43,8 +44,9 @@
   import PackageForm from "./components/PackageForm";
   import CommandDialog from "./components/CommandDialog";
   import ComposerJsonDialog from "./components/ComposerJsonDialog";
+  import ComposerRepositoriesDialog from "./components/ComposerRepositoriesDialog";
 
   export default {
-    components: {ComposerJsonDialog, CommandDialog, PackageForm, PackageList},
+    components: {ComposerRepositoriesDialog, ComposerJsonDialog, CommandDialog, PackageForm, PackageList},
   }
 </script>

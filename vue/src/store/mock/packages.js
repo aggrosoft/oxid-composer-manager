@@ -12,7 +12,7 @@ export default {
       "version": "1.0.0",
       "latest": "1.0.0",
       "latest-status": "up-to-date",
-      "description": "Force loading all categories in frontend"
+      "description": "Force loading all categories in frontend, very long description text here, very long description text here, very long description text here"
     },
     {
       "name": "incenteev/composer-parameter-handler",

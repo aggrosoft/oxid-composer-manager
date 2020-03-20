@@ -17,6 +17,10 @@ export default {
       "type": "composer",
       "url": "https://packages.aggrosoft.de"
     },
+    "bla": {
+      "type": "composer",
+      "url": "https://packages.example.org"
+    },
     "netensio/net_cookie_manager": {
       "type": "path",
       "url": "extensions/net_cookie_manager"
