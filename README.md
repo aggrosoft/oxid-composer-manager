@@ -10,7 +10,7 @@ Manage oxid eShop composer modules through admin interface
 Run the following command in your shop base folder (this is where composer.json is located)
 
 ```
-composer require aggrosoft/oxid-composer-maanger
+composer require aggrosoft/oxid-composer-manager
 ```
 
 ### Direct install using zip
