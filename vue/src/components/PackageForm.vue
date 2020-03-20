@@ -139,7 +139,7 @@
         if (this.selectedPackage) {
           this.progressMessage = undefined
           this.progress = true
-          const result = await this.addPackage(this.selectedPackage.name)
+          const result = await this.addPackage(this.selectedPackage)
           this.progressMessage = result
         }
       },
