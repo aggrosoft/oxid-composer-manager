@@ -1,4 +1,7 @@
 <?php
+
+$sMetadataVersion = '1.1';
+
 $aModule = array(
     'id'           => 'composerman',
     'title'        => '<img src="' . oxRegistry::getConfig()->getShopUrl() . 'modules/composerman/out/img/logo-composer.png" height="15" alt="Composer Manager" title="Composer Manager"> Composer Manager',
