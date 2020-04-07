@@ -34,12 +34,12 @@ class ComposerUtil
 
     public static function addPackage ($package) {
         @ini_set("memory_limit",-1);
-        return self::runComposerCommand('require ' . $package);
+        return self::runComposerCommand('require ' . $package . ' --no-dev');
     }
 
     public static function updatePackage ($package) {
         @ini_set("memory_limit",-1);
-        return self::runComposerCommand('update ' . $package);
+        return self::runComposerCommand('update ' . $package . ' --no-dev');
     }
 
     public static function removePackage ($package) {

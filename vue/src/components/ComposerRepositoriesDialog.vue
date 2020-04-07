@@ -131,7 +131,7 @@
     },
     computed: {
       repositories: function () {
-        return this.modifiedComposerJson ? Object.entries(this.modifiedComposerJson.repositories).map(v => {
+        return this.modifiedComposerJson && this.modifiedComposerJson.repositories ? Object.entries(this.modifiedComposerJson.repositories).map(v => {
           return Object.assign({}, v[1], {key: v[0]})
         }) : []
       },
