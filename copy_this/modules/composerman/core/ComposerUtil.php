@@ -67,9 +67,25 @@ class ComposerUtil
         $stream = fopen('php://temp', 'w+');
         $output = new StreamOutput($stream);
 
+        $dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher();
+        $dispatcher->addListener(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event) {
+            $output = $event->getOutput();
+
+            $command = $event->getCommand();
+
+            $output->writeln(sprintf('Oops, exception thrown while running command <info>%s</info>', $command->getName()));
+
+            // gets the current exit code (the exception code or the exit code set by a ConsoleEvents::TERMINATE event)
+            $exitCode = $event->getExitCode();
+
+            // changes the exception to another one
+            $event->setError(new \LogicException('Caught exception', $exitCode, $event->getError()));
+        });
+
         // Programmatically run command
         $application = new Application();
         $application->setAutoExit(false);
+        $application->setDispatcher($dispatcher);
         $input = new StringInput($input);
         $input->setInteractive(false);
         $code = $application->run($input, $output);

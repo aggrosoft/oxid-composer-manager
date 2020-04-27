@@ -3,9 +3,9 @@
   "type": "oxideshop-module",
   "description": "Manage oxid eShop composer modules through admin interface",
   "license": "MIT",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "require": {
-    "composer/composer": "^1.9.0"
+    "composer/composer": "^1.10.5"
   },
   "authors": [
     {
