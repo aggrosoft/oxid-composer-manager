@@ -23,6 +23,7 @@ $aModule = array(
 
     ),
     'settings' => array(
+        array('group' => 'composerman_main', 'name' => 'sComposerExecutable', 'type' => 'str',   'value' => '' ),
 
     ),
     'blocks' => array(

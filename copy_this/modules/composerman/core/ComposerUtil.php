@@ -56,7 +56,54 @@ class ComposerUtil
         return realpath(getShopBasePath().'/../') . '/';
     }
 
+    public static function getComposerExecutable () {
+        return oxRegistry::getConfig()->getShopConfVar('sComposerExecutable', null, 'module:composerman');
+    }
+
     public static function runComposerCommand ($input) {
+        if (self::useTerminal()) {
+            return self::runTerminalComposerCommand($input);
+        }else{
+            return self::runDirectComposerCommand($input);
+        }
+    }
+
+    public static function purgePackage($package) {
+        $info = ComposerUtil::getPackageJson($package);
+        if ($info && $info['type'] === 'oxideshop-module'){
+            $settings = $info['extra']['oxideshop'];
+            if ($settings['target-directory']){
+                $moduleDir = getShopBasePath().'/modules/'.$settings['target-directory'];
+                if (is_dir($moduleDir)){
+                    self::deleteDirectory($moduleDir);
+                }
+            }
+
+        }
+    }
+
+    public static function getPackageType($package) {
+        $info = ComposerUtil::getPackageJson($package);
+        return $info ? $info['type'] : null;
+    }
+
+    protected static function useTerminal () {
+        return self::getComposerExecutable() !== '';
+    }
+
+    protected static function runTerminalComposerCommand ($input) {
+        $response = Terminal::in(self::getSourcePath())
+            ->withEnvironmentVariables([
+                'COMPOSER_HOME' => self::getComposerExecutable(),
+                'COMPOSER_CACHE_DIR' =>  getShopBasePath() . '/tmp/'
+            ])
+            ->retries(3)
+            ->run(self::getComposerExecutable() . ' ' . $input);
+
+        return $response->output();
+    }
+
+    protected static function runDirectComposerCommand ($input) {
         // prepare env
         $cwd = getcwd();
         putenv('COMPOSER_HOME=' . self::getSourcePath() . 'vendor/bin/composer');
@@ -96,25 +143,6 @@ class ComposerUtil
         // rewind stream to read full contents
         rewind($stream);
         return stream_get_contents($stream);
-    }
-
-    public static function purgePackage($package) {
-        $info = ComposerUtil::getPackageJson($package);
-        if ($info && $info['type'] === 'oxideshop-module'){
-            $settings = $info['extra']['oxideshop'];
-            if ($settings['target-directory']){
-                $moduleDir = getShopBasePath().'/modules/'.$settings['target-directory'];
-                if (is_dir($moduleDir)){
-                    self::deleteDirectory($moduleDir);
-                }
-            }
-
-        }
-    }
-
-    public static function getPackageType($package) {
-        $info = ComposerUtil::getPackageJson($package);
-        return $info ? $info['type'] : null;
     }
 
     protected static function deleteDirectory( $dir )

@@ -5,7 +5,8 @@
   "license": "MIT",
   "version": "1.0.14",
   "require": {
-    "composer/composer": "^1.10.5"
+    "composer/composer": "^1.10.5",
+    "titasgailius/terminal": "^0.2.7"
   },
   "authors": [
     {
