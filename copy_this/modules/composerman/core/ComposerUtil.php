@@ -92,7 +92,7 @@ class ComposerUtil
     }
 
     protected static function runTerminalComposerCommand ($input) {
-        $response = Terminal::in(self::getSourcePath())
+        $response = \TitasGailius\Terminal\Terminal::in(self::getSourcePath())
             ->withEnvironmentVariables([
                 'COMPOSER_HOME' => self::getComposerExecutable(),
                 'COMPOSER_CACHE_DIR' =>  getShopBasePath() . '/tmp/'
