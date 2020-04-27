@@ -39,7 +39,7 @@ class ComposerUtil
 
     public static function updatePackage ($package) {
         @ini_set("memory_limit",-1);
-        return self::runComposerCommand('update ' . $package . ' --no-dev');
+        return self::runComposerCommand('update ' . $package);
     }
 
     public static function removePackage ($package) {
