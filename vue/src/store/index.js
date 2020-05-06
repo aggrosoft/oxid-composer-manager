@@ -127,6 +127,20 @@ export default new Vuex.Store({
           return r.data
         })
       })
+    },
+    async runConsole ({commit, dispatch, getters}, cmd) {
+      commit('setLoading', true)
+      return getters.token.then(token => {
+        const data = new FormData();
+        data.set('stoken', token)
+        data.set('cl', 'composerman')
+        data.set('fnc', 'runoeconsole')
+        data.set('cmd', cmd)
+        return api.post('/admin/index.php', data).then(r => {
+          dispatch('loadPackages')
+          return r.data
+        })
+      })
     }
   },
   modules: {

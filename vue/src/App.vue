@@ -10,6 +10,7 @@
       <ComposerJsonDialog />
       <ComposerRepositoriesDialog />
       <CommandDialog />
+      <ConsoleDialog />
     </v-app-bar>
 
     <v-content>
@@ -45,8 +46,9 @@
   import CommandDialog from "./components/CommandDialog";
   import ComposerJsonDialog from "./components/ComposerJsonDialog";
   import ComposerRepositoriesDialog from "./components/ComposerRepositoriesDialog";
+  import ConsoleDialog from "./components/ConsoleDialog";
 
   export default {
-    components: {ComposerRepositoriesDialog, ComposerJsonDialog, CommandDialog, PackageForm, PackageList},
+    components: {ConsoleDialog, ComposerRepositoriesDialog, ComposerJsonDialog, CommandDialog, PackageForm, PackageList},
   }
 </script>

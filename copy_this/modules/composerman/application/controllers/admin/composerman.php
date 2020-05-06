@@ -66,4 +66,11 @@ class composerman extends oxAdminDetails {
         exit();
     }
 
+    public function runoeconsole() {
+        $cmd = oxRegistry::getConfig()->getRequestParameter('cmd');
+        $out = OxidConsoleUtil::runCommand(trim($cmd));
+        echo $out;
+        exit();
+    }
+
 }
