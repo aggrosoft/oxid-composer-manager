@@ -130,7 +130,7 @@
       },
       submitCommand: async function() {
         this.output = false
-        this.output = await this.runCommand(this.fullCommand)
+        this.output = await this.runConsole(this.fullCommand)
       },
       ...mapActions(['runConsole'])
     }
