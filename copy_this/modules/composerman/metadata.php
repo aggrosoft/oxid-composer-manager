@@ -14,6 +14,7 @@ $aModule = array(
     ),
     'files'       => array(
         'ComposerUtil' => 'composerman/core/ComposerUtil.php',
+        'OxidConsoleUtil' => 'composerman/core/OxidConsoleUtil.php',
         'composerman' => 'composerman/application/controllers/admin/composerman.php',
     ),
     'templates'   => array(
