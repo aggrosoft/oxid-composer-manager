@@ -63,11 +63,16 @@ class ComposerUtil
     }
 
     public static function runComposerCommand ($input) {
-        if (self::useTerminal()) {
-            return self::runTerminalComposerCommand($input);
-        }else{
-            return self::runDirectComposerCommand($input);
+        try{
+            if (self::useTerminal()) {
+                return self::runTerminalComposerCommand($input);
+            }else{
+                return self::runDirectComposerCommand($input);
+            }
+        }catch(Exception $ex) {
+            return $ex->getMessage();
         }
+
     }
 
     public static function purgePackage($package) {
