@@ -5,8 +5,10 @@
   "license": "MIT",
   "version": "1.1.5",
   "require": {
-    "composer/composer": "^1.0",
-    "titasgailius/terminal": "^0.2.7"
+    "composer/composer": "^1.0"
+  },
+  "suggest": {
+    "titasgailius/terminal": "Run composer commands using system calls and allow retries"
   },
   "authors": [
     {

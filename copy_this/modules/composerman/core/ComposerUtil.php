@@ -95,7 +95,7 @@ class ComposerUtil
     }
 
     protected static function useTerminal () {
-        return self::getComposerExecutable() !== '';
+        return self::getComposerExecutable() !== '' && class_exists('\TitasGailius\Terminal\Terminal');
     }
 
     protected static function runTerminalComposerCommand ($input) {
