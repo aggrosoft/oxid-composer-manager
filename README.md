@@ -1,5 +1,5 @@
 # oxid-composer-manager
-Manage oxid eShop composer modules through admin interface
+Manage OXID eShop composer modules via admin panel
 
 ![Screenshot](/assets/screen.jpg?raw=true "Screenshot")
 
