@@ -1,7 +1,7 @@
 <?php
 
 $sLangName = "Deutsch";
-
+$iLangNr = 0;
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
