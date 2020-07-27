@@ -4,7 +4,7 @@ $sMetadataVersion = '1.1';
 
 $aModule = array(
     'id'           => 'composerman',
-    'title'        => '<img src="' . oxRegistry::getConfig()->getShopUrl() . 'modules/composerman/out/img/logo-composer.png" height="15" alt="Composer Manager" title="Composer Manager"> Composer Manager',
+    'title'        => '<img src="/modules/composerman/out/img/logo-composer.png" height="15" alt="Composer Manager" title="Composer Manager"> Composer Manager',
     'description'  => 'Manage oxid eShop composer modules through admin interface',
     'thumbnail'    => '',
     'version'      => '1.1.6',
