@@ -4,6 +4,7 @@ use Composer\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 
 class ComposerUtil
@@ -36,17 +37,17 @@ class ComposerUtil
 
     public static function addPackage ($package) {
         @ini_set("memory_limit",-1);
-        return self::runComposerCommand('require ' . $package);
+        return self::runComposerCommand('require --update-no-dev ' . $package);
     }
 
     public static function updatePackage ($package) {
         @ini_set("memory_limit",-1);
-        return self::runComposerCommand('update ' . $package);
+        return self::runComposerCommand('update --no-dev ' . $package);
     }
 
     public static function removePackage ($package) {
         @ini_set("memory_limit",-1);
-        return self::runComposerCommand('remove ' . $package);
+        return self::runComposerCommand('remove --update-no-dev ' . $package);
     }
 
     public static function dumpAutoloader () {
