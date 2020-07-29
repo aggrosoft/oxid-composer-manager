@@ -7,7 +7,7 @@ $aModule = array(
     'title'        => '<img src="/modules/composerman/out/img/logo-composer.png" height="15" alt="Composer Manager" title="Composer Manager"> Composer Manager',
     'description'  => 'Manage oxid eShop composer modules through admin interface',
     'thumbnail'    => '',
-    'version'      => '1.1.8',
+    'version'      => '1.1.9',
     'author'       => 'Aggrosoft GmbH',
     'extend'      => array(
 
