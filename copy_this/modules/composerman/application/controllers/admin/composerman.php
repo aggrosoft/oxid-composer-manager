@@ -27,8 +27,10 @@ class composerman extends oxAdminDetails {
 
     public function updatepackage() {
         $package = oxRegistry::getConfig()->getRequestParameter('package');
+        ComposerUtil::backupPackageLicenses($package);
         ComposerUtil::purgePackage($package);
         $out = ComposerUtil::updatePackage($package);
+        ComposerUtil::restorePackageLicenses($package);
         ComposerUtil::dumpAutoloader();
         echo $out;
         exit();

@@ -75,17 +75,37 @@ class ComposerUtil
 
     }
 
+    public static function backupPackageLicenses($package){
+        $moduleDir = self::getPackageModuleDirectory($package);
+        if ($moduleDir && is_dir($moduleDir.'/license/')){
+            self::copyDirectory($moduleDir.'/license/', self::getLicenseBackupDirectory($package));
+        }
+    }
+
+    public static function restorePackageLicenses($package){
+        $moduleDir = self::getPackageModuleDirectory($package);
+        if ($moduleDir && is_dir($moduleDir.'/license/')){
+            $backupDir = self::getLicenseBackupDirectory($package);
+            if (is_dir($backupDir)){
+                self::copyDirectory($backupDir,$moduleDir.'/license/');
+            }
+        }
+    }
+
     public static function purgePackage($package) {
+        $moduleDir = self::getPackageModuleDirectory($package);
+        if ($moduleDir && is_dir($moduleDir)){
+            self::deleteDirectory($moduleDir);
+        }
+    }
+
+    public static function getPackageModuleDirectory($package){
         $info = ComposerUtil::getPackageJson($package);
         if ($info && $info['type'] === 'oxideshop-module'){
             $settings = $info['extra']['oxideshop'];
-            if ($settings['target-directory']){
-                $moduleDir = getShopBasePath().'/modules/'.$settings['target-directory'];
-                if (is_dir($moduleDir)){
-                    self::deleteDirectory($moduleDir);
-                }
+            if ($settings['target-directory']) {
+                return getShopBasePath() . '/modules/' . $settings['target-directory'];
             }
-
         }
     }
 
@@ -152,6 +172,18 @@ class ComposerUtil
         return stream_get_contents($stream);
     }
 
+    protected static function copyDirectory ($src, $destination)
+    {
+        if (!is_dir($destination)){
+            mkdir($destination, 0777, true);
+        }
+
+        $files = array_diff(scandir($src), array('.', '..'));
+        foreach ($files as $file) {
+            (is_dir("$src/$file")) ? self::copyDirectory("$src/$file", "$destination/$file") : copy("$src/$file", "$destination/$file");
+        }
+    }
+
     protected static function deleteDirectory( $dir )
     {
         $files = array_diff(scandir($dir), array('.', '..'));
@@ -163,4 +195,7 @@ class ComposerUtil
         return rmdir($dir);
     }
 
+    protected static function getLicenseBackupDirectory($package) {
+        return getShopBasePath()."/tmp/.licensebackup/$package/";
+    }
 }
