@@ -139,8 +139,14 @@
         if (this.selectedPackage) {
           this.progressMessage = undefined
           this.progress = true
-          const result = await this.addPackage(this.selectedPackage)
-          this.progressMessage = result
+          try{
+            const result = await this.addPackage(this.selectedPackage)
+            this.progressMessage = result
+          }catch(err){
+            this.progressMessage = err.response
+            return
+          }
+
         }
       },
       ...mapActions(['addPackage'])

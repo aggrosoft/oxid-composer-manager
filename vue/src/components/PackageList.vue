@@ -125,16 +125,28 @@
         if (await this.$refs.confirm.open('Paket aktualisieren?','Wollen Sie das gewählte Paket "'+item.name+'" wirklich aktualisieren?')) {
           this.progressMessage = undefined
           this.progress = true
-          const result = await this.updatePackage(item.name)
-          this.progressMessage = result
+          try{
+            const result = await this.updatePackage(item.name)
+            this.progressMessage = result
+          }catch(err){
+            this.progressMessage = err.response
+            return
+          }
+
         }
       },
       clickDeletePackage: async function(item) {
         if (await this.$refs.confirm.open('Paket entfernen?','Wollen Sie das gewählte Paket "'+item.name+'" wirklich löschen? Dieser Vorgang kann das System unbrauchbar machen, es werden nur Pakete vom Typ "oxideshop-module" gelöscht.')){
           this.progressMessage = undefined
           this.progress = true
-          const result =  await this.removePackage(item.name)
-          this.progressMessage = result
+          try{
+            const result = await this.removePackage(item.name)
+            this.progressMessage = result
+          }catch(err){
+            this.progressMessage = err.response
+            return
+          }
+
         }
       },
       ...mapActions(['initPackages', 'updatePackage', 'removePackage'])
