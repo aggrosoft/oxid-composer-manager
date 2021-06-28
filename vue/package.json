@@ -11,7 +11,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.7.0",
     "pretty": "^2.0.0",
-    "prismjs": "^1.22.0",
+    "prismjs": "^1.24.0",
     "vue": "^2.6.12",
     "vue-prism-editor": "^0.5.1",
     "vuetify": "^2.3.19",
