@@ -14,7 +14,7 @@
     "prismjs": "^1.22.0",
     "vue": "^2.6.12",
     "vue-prism-editor": "^0.5.1",
-    "vuetify": "^2.3.19",
+    "vuetify": "^2.6.10",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
